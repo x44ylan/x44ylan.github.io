@@ -1,0 +1,13 @@
+.venv/
+site/
+.cache/
+node_modules/
+docs/.vitepress/cache/
+docs/.vitepress/dist/
+.playwright-cli/
+__pycache__/
+*.pyc
+
+# Local-only agent instructions
+AGENTS.md
+AGENT.md
