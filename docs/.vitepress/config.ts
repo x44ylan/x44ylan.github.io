@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   title: 'x44ylan',
-  description: 'Personal site of Dylan Liew.',
+  description: 'Hello World',
   lang: 'en',
   cleanUrls: true,
   appearance: 'dark',
