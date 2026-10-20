@@ -1,0 +1,74 @@
+@font-face {
+  font-family: 'JetBrains Mono Nerd Font';
+  src: url('/assets/fonts/jetbrains-mono-nerd-medium.woff2') format('woff2');
+  font-weight: 500 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --vp-font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --vp-font-family-mono: 'JetBrains Mono Nerd Font', monospace;
+  --vp-c-brand-1: #0969da;
+  --vp-c-bg: #fff;
+  --vp-c-bg-alt: #f6f8fa;
+  --vp-c-text-1: #1f2328;
+  --vp-c-text-2: #59636e;
+  --vp-c-divider: #d1d9e0;
+  --vp-c-neutral-inverse: var(--vp-c-bg);
+  --vp-input-border-color: var(--vp-c-divider);
+  --vp-input-switch-bg-color: var(--vp-c-bg-alt);
+  --vp-shadow-1: 0 1px 2px #00000020;
+  --selection-bg: #b6e3ff;
+  --selection-text: #1f2328;
+}
+
+.dark {
+  --vp-c-brand-1: #79c0ff;
+  --vp-c-bg: #0d1117;
+  --vp-c-bg-alt: #151b23;
+  --vp-c-text-1: #f0f6fc;
+  --vp-c-text-2: #9198a1;
+  --vp-c-divider: #3d444d;
+  --selection-bg: #264f78;
+  --selection-text: #fff;
+}
+
+::selection { background: var(--selection-bg); color: var(--selection-text); }
+
+.appearance { position: fixed; top: 24px; right: 24px; z-index: 2; }
+.home-socials { justify-content: center; gap: 6px; margin-top: 20px; }
+.home-socials .VPSocialLink { width: 44px; height: 44px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--vp-c-brand-1); outline-offset: 4px; border-radius: 5px; }
+.NotFound { display: grid; place-content: center; gap: 20px; min-height: 100svh; text-align: center; }
+.NotFound h1 { font-size: 24px; }
+.NotFound a { color: var(--vp-c-brand-1); }
+
+.home { position: relative; isolation: isolate; display: grid; place-items: center; min-height: 100svh; overflow: hidden; }
+.home-heading { position: relative; z-index: 1; text-align: center; padding: 0 20px; }
+.home-heading h1 { font-family: var(--vp-font-family-mono); font-size: clamp(44px, 6vw, 76px); font-weight: 500; line-height: 1.2; letter-spacing: -.075em; }
+.home-heading h1 span { color: var(--vp-c-brand-1); }
+.home-scenery { position: absolute; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse at 50% 110%, var(--vp-c-bg-alt), var(--vp-c-bg) 72%); }
+.home-scenery canvas { display: block; width: 100%; height: 100%; font-family: var(--vp-font-family-mono); }
+.home-scenery[data-scene='fallback'] canvas { visibility: hidden; }
+.home-scenery::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, var(--vp-c-bg), transparent 22%, transparent 80%, var(--vp-c-bg)); }
+
+.themes { max-width: 720px; margin: 0 auto; padding: clamp(72px, 14svh, 140px) 20px 80px; font-family: var(--vp-font-family-mono); }
+.themes-head { margin-bottom: 32px; }
+.themes-back { color: var(--vp-c-text-2); font-size: 14px; text-decoration: none; }
+.themes-back span, .themes-head h1::after { color: var(--vp-c-brand-1); }
+.themes-head h1 { margin-top: 12px; font-size: clamp(32px, 5vw, 44px); font-weight: 500; letter-spacing: -.05em; line-height: 1.2; }
+.themes-head h1::after { content: '.'; }
+.themes-head p { margin-top: 8px; color: var(--vp-c-text-2); font-size: 14px; }
+.themes-head em { color: var(--vp-c-brand-1); font-style: normal; }
+.themes-list { list-style: none; padding: 0; border-top: 1px solid var(--vp-c-divider); }
+.themes-list a { display: grid; grid-template-columns: 2.5ch 15ch 1fr auto; gap: 16px; align-items: baseline; min-height: 44px; padding: 12px 8px; border-bottom: 1px solid var(--vp-c-divider); color: var(--vp-c-text-1); text-decoration: none; transition: background-color .15s; }
+.themes-list a:hover { background: var(--vp-c-bg-alt); }
+.themes-num, .themes-note, .themes-path { color: var(--vp-c-text-2); font-size: 13px; }
+.themes-name { font-size: 15px; }
+.themes-path { text-align: right; }
+.themes-path b { margin-left: 8px; padding: 1px 6px; border-radius: 4px; background: var(--vp-c-brand-1); color: var(--vp-c-bg); font-size: 11px; font-weight: 600; }
+@media (max-width: 640px) {
+  .themes-list a { grid-template-columns: 2.5ch 1fr auto; gap: 4px 12px; }
+  .themes-note { grid-column: 2 / -1; grid-row: 2; }
+}
