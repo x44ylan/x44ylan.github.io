@@ -86,12 +86,12 @@ async page => {
   if (await page.evaluate(() => window.__sceneDraws) !== staticDraws) failures.push('Reduced-motion scene redraws while idle')
   await page.emulateMedia({ reducedMotion: 'no-preference' })
   await page.waitForTimeout(250)
-  if (await page.evaluate(() => window.__sceneDraws) <= staticDraws) failures.push('Ocean scene did not animate when motion is enabled')
+  if (await page.evaluate(() => window.__sceneDraws) <= staticDraws) failures.push('Orbital scene did not animate when motion is enabled')
 
-  for (const path of ['/labs/', '/gyms/', '/blogs/', '/labs/mobile/']) {
+  for (const path of ['/labs/', '/gyms/', '/blogs/', '/labs/mobile/', '/themes', '/debris', '/train', '/sharks', '/fireflies', '/rain']) {
     const response = await page.goto(origin + path, { waitUntil: 'networkidle' })
     await page.getByText('Page not found', { exact: true }).waitFor()
-    if (await page.locator('.vp-doc').count()) failures.push(`Study page remains: ${path}`)
+    if (await page.locator('.vp-doc').count()) failures.push(`Removed page remains: ${path}`)
     if (response && response.status() !== 404 && !await page.locator('.NotFound').count()) failures.push(`Old route still resolves: ${path}`)
   }
 

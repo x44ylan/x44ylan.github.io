@@ -6,10 +6,8 @@ export default defineConfig({
   lang: 'en',
   cleanUrls: true,
   appearance: 'dark',
-  // Theme preview routes (/fireflies, /sharks, ...) stay reachable but unlisted.
   sitemap: {
     hostname: 'https://x44ylan.com',
-    transformItems: (items) => items.filter((item) => new URL(item.url, 'https://x44ylan.com').pathname === '/'),
   },
   head: [
     ['link', { rel: 'icon', href: '/assets/img/r.png', type: 'image/png' }],

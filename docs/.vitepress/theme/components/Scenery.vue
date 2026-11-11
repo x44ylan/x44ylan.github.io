@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { useData } from 'vitepress'
-import { OceanEngine, type SharkSpec } from '../sharks'
-import { SceneEngine, type SceneTheme } from '../sharks/scenes'
-
-const props = withDefaults(defineProps<{ theme?: SceneTheme | 'sharks' }>(), { theme: 'debris' })
+import { OrbitEngine } from '../orbit/engine'
 
 const { isDark } = useData()
 const host = ref<HTMLDivElement>()
@@ -14,13 +11,6 @@ let cleanup = () => {}
 let updateTheme = () => {}
 watch(isDark, () => updateTheme())
 
-const APEX_SHARKS: SharkSpec[] = [
-  { kind: 'classic', size: 1 },
-  { kind: 'thresher', size: 0.92 },
-  { kind: 'tiger', size: 0.85 },
-  { kind: 'mako', size: 0.78 },
-]
-
 onMounted(() => {
   try {
     if (disposed || !host.value) return
@@ -29,9 +19,7 @@ onMounted(() => {
     canvas.setAttribute('aria-hidden', 'true')
     element.appendChild(canvas)
 
-    const engine = props.theme === 'sharks'
-      ? new OceanEngine(canvas, APEX_SHARKS, isDark.value)
-      : new SceneEngine(canvas, props.theme, isDark.value)
+    const engine = new OrbitEngine(canvas, isDark.value)
     const heading = element.parentElement?.querySelector<HTMLElement>('.home-heading')
     const updateAvoid = () => {
       if (!heading) return
