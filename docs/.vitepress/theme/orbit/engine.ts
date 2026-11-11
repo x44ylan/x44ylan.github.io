@@ -230,7 +230,7 @@ export class OrbitEngine {
   // ── orbital debris ─────────────────────────────────────────
 
   private drawDebris() {
-    const { W, H, t, pointer, dark, cols, rows, cw, ch } = this;
+    const { ctx, W, H, t, pointer, dark, cols, rows, cw, ch } = this;
     this.starfield(150, rows, 31);
 
     // A shooting star every few seconds.
@@ -247,6 +247,18 @@ export class OrbitEngine {
     const R = H * 0.78;
     const L = [-0.5, -0.7, 0.5];
     const ln = Math.hypot(L[0], L[1], L[2]);
+    if (!dark) {
+      // A continuous ocean beneath the ASCII texture keeps the globe coherent
+      // on a bright sky, including the gaps between clouds and continents.
+      const ocean = ctx.createRadialGradient(cx - R * 0.35, cy - R * 0.9, R * 0.1, cx, cy, R * 1.2);
+      ocean.addColorStop(0, "hsl(202, 75%, 96%)");
+      ocean.addColorStop(0.5, "hsl(210, 65%, 90%)");
+      ocean.addColorStop(1, "hsl(215, 48%, 78%)");
+      ctx.fillStyle = ocean;
+      ctx.beginPath();
+      ctx.arc(cx, cy, R, 0, TAU);
+      ctx.fill();
+    }
     const r0 = Math.max(0, Math.floor((cy - R - ch * 3) / ch));
     for (let r = r0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
@@ -264,12 +276,22 @@ export class OrbitEngine {
           const cloud = this.vnoise(lon * 5 - t * 0.04, lat * 7, 9) > 0.66;
           const rim = d > R - ch * 0.7;
           if (rim) {
-            this.put(c, r, ":", dark ? "rgba(125,211,252,0.85)" : "rgba(2,132,199,0.8)");
+            this.put(c, r, ":", dark ? "rgba(125,211,252,0.85)" : "hsla(201, 65%, 43%, 0.6)");
           } else if (light > 0.04) {
             const s = clamp(light, 0, 1);
-            if (cloud) this.put(c, r, s > 0.5 ? "~" : "-", `rgba(241,245,249,${(0.35 + s * 0.55).toFixed(2)})`);
-            else if (land) this.put(c, r, s > 0.55 ? "%" : "#", `rgba(${dark ? "134,190,110" : "77,124,15"},${(0.3 + s * 0.6).toFixed(2)})`, `rgba(77,124,15,${(s * 0.18).toFixed(2)})`);
-            else this.put(c, r, s > 0.5 ? ":" : ".", `rgba(${dark ? "96,165,250" : "29,78,216"},${(0.3 + s * 0.6).toFixed(2)})`, `rgba(30,64,175,${(s * 0.16).toFixed(2)})`);
+            if (cloud) {
+              this.put(c, r, s > 0.5 ? "~" : "-",
+                dark ? `rgba(241,245,249,${(0.35 + s * 0.55).toFixed(2)})` : "hsla(211, 30%, 38%, 0.8)",
+                dark ? undefined : "hsla(205, 60%, 99%, 0.6)");
+            } else if (land) {
+              this.put(c, r, s > 0.55 ? "%" : "#",
+                dark ? `rgba(134,190,110,${(0.3 + s * 0.6).toFixed(2)})` : "hsla(145, 35%, 31%, 0.8)",
+                dark ? `rgba(77,124,15,${(s * 0.18).toFixed(2)})` : "hsla(145, 35%, 52%, 0.2)");
+            } else {
+              this.put(c, r, s > 0.5 ? ":" : ".",
+                dark ? `rgba(96,165,250,${(0.3 + s * 0.6).toFixed(2)})` : "hsla(211, 65%, 37%, 0.8)",
+                dark ? `rgba(30,64,175,${(s * 0.16).toFixed(2)})` : undefined);
+            }
           } else if (land && hash3(c, r, 5) > 0.72) {
             const flick = 0.5 + 0.5 * Math.sin(t * 2 + c * 3 + r);
             this.put(c, r, ".", `rgba(251,191,36,${(0.45 + flick * 0.45).toFixed(2)})`);

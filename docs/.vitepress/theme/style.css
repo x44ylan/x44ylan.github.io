@@ -51,4 +51,5 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--vp-c-brand-1); 
 .home-scenery { position: absolute; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse at 50% 110%, var(--vp-c-bg-alt), var(--vp-c-bg) 72%); }
 .home-scenery canvas { display: block; width: 100%; height: 100%; font-family: var(--vp-font-family-mono); }
 .home-scenery[data-scene='fallback'] canvas { visibility: hidden; }
-.home-scenery::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, var(--vp-c-bg), transparent 22%, transparent 80%, var(--vp-c-bg)); }
+.home-scenery::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, var(--vp-c-bg), transparent 22%, transparent 96%, var(--vp-c-bg) 125%); }
+.dark .home-scenery::after { background: linear-gradient(to bottom, var(--vp-c-bg), transparent 22%, transparent 80%, var(--vp-c-bg)); }
