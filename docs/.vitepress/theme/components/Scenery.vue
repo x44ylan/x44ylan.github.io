@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { useData } from 'vitepress'
-import { OrbitEngine } from '../orbit/engine'
+import { PixelSceneryEngine, type PixelScene } from '../scenery/engine'
+
+const props = defineProps<{ scene: PixelScene }>()
 
 const { isDark } = useData()
 const host = ref<HTMLDivElement>()
@@ -9,7 +11,10 @@ const state = ref('loading')
 let disposed = false
 let cleanup = () => {}
 let updateTheme = () => {}
+let updateScene = () => {}
+
 watch(isDark, () => updateTheme())
+watch(() => props.scene, () => updateScene())
 
 onMounted(() => {
   try {
@@ -19,7 +24,7 @@ onMounted(() => {
     canvas.setAttribute('aria-hidden', 'true')
     element.appendChild(canvas)
 
-    const engine = new OrbitEngine(canvas, isDark.value)
+    const engine = new PixelSceneryEngine(canvas, props.scene, isDark.value)
     const heading = element.parentElement?.querySelector<HTMLElement>('.home-heading')
     const updateAvoid = () => {
       if (!heading) return
@@ -43,6 +48,10 @@ onMounted(() => {
       engine.setTheme(isDark.value)
     }
 
+    updateScene = () => {
+      engine.setScene(props.scene)
+    }
+
     cleanup = () => {
       avoidObserver.disconnect()
       engine.destroy()
@@ -58,9 +67,10 @@ onUnmounted(() => {
   disposed = true
   cleanup()
   updateTheme = () => {}
+  updateScene = () => {}
 })
 </script>
 
 <template>
-  <div ref="host" class="home-scenery" :data-scene="state" aria-hidden="true" />
+  <div ref="host" class="home-scenery" :data-scene="state" :data-theme-scene="scene" aria-hidden="true" />
 </template>
